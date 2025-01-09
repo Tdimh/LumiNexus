@@ -33,6 +33,11 @@
     navigator.mediaDevices.getUserMedia({ video: true })
       .then((stream) => {
         videoElement.srcObject = stream;
+        videoElement.onloadedmetadata = function() {
+          // Set canvas dimensions to match the video
+          canvas.width = videoElement.videoWidth;
+          canvas.height = videoElement.videoHeight;
+        };
       })
       .catch((err) => {
         console.error("Error accessing camera: ", err);
@@ -141,17 +146,25 @@
         // Step 5: Display wavelength type based on average brightness
         const averageWavelength = wavelengthSum / pixelCount;
         let wavelengthType = "";
+        let radiation = "";
 
         if (averageWavelength < 85) {
           wavelengthType = "Short Wavelength (Ultraviolet)";
+          radiation = "This wavelength has potential for harmful radiation.";
         } else if (averageWavelength < 170) {
           wavelengthType = "Medium Wavelength (Visible)";
+          radiation = "This wavelength is within the visible spectrum and is safe.";
         } else {
           wavelengthType = "Long Wavelength (Infrared)";
+          radiation = "This wavelength is associated with infrared radiation, typically safe but can cause heating effects.";
         }
 
         // Show result in the output
-        output.innerHTML = `<p>Average Wavelength: ${averageWavelength.toFixed(2)}</p><p>Wavelength Type: ${wavelengthType}</p>`;
+        output.innerHTML = ` 
+          <p>Average Wavelength: ${averageWavelength.toFixed(2)}</p>
+          <p>Wavelength Type: ${wavelengthType}</p>
+          <p>Radiation Analysis: ${radiation}</p>
+        `;
       };
     }
   </script>
