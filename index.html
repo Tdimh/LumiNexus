@@ -13,6 +13,35 @@
     <h1>Light Wavelength Detector</h1>
   </header>
 
+
+  <script>
+    const videoElement = document.getElementById('videoElement');
+    const canvas = document.getElementById('canvas');
+    const takePhotoBtn = document.getElementById('takePhotoBtn');
+    const ctx = canvas.getContext('2d');
+  
+    // Access the camera
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then((stream) => {
+        videoElement.srcObject = stream;
+      })
+      .catch((err) => {
+        console.error("Error accessing camera: ", err);
+      });
+  
+    // Capture the photo when button is clicked
+    takePhotoBtn.addEventListener('click', () => {
+      // Draw the current video frame to the canvas
+      ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+      
+      // Convert canvas content to image data
+      const imageData = canvas.toDataURL('image/png');
+      
+      // Show an alert with the captured image data (you can process it later)
+      alert("Image captured: " + imageData);
+    });
+  </script>
+  
   <div class="container">
     <div class="card">
       <h2>Take a Picture or Upload Light Data</h2>
@@ -33,7 +62,34 @@
   <footer>
     &copy; 2025 Light Detector Co.
   </footer>
-
+  <script>
+    const videoElement = document.getElementById('videoElement');
+    const canvas = document.getElementById('canvas');
+    const takePhotoBtn = document.getElementById('takePhotoBtn');
+    const ctx = canvas.getContext('2d');
+  
+    // Access the camera
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then((stream) => {
+        videoElement.srcObject = stream;
+      })
+      .catch((err) => {
+        console.error("Error accessing camera: ", err);
+      });
+  
+    // Capture the photo when button is clicked
+    takePhotoBtn.addEventListener('click', () => {
+      // Draw the current video frame to the canvas
+      ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+      
+      // Convert canvas content to image data
+      const imageData = canvas.toDataURL('image/png');
+      
+      // Show an alert with the captured image data (you can process it later)
+      alert("Image captured: " + imageData);
+    });
+  </script>
+  
   <script>
     const cameraInput = document.getElementById('cameraInput');
     const processButton = document.getElementById('processButton');
