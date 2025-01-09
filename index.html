@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Light Wavelength Detector</title>
+  <style>
+    /* Your existing styles */
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Light Wavelength Detector</h1>
+  </header>
+
+  <div class="container">
+    <div class="card">
+      <h2>Take a Picture or Upload Light Data</h2>
+      
+      <!-- Camera input -->
+      <input type="file" id="cameraInput" accept="image/*" capture="camera" />
+      <button class="btn" id="processButton" disabled>Analyze Image</button>
+
+      <!-- Display selected image -->
+      <div id="imageContainer"></div>
+
+      <div class="output" id="output">
+        <!-- Wavelength results will be shown here -->
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 Light Detector Co.
+  </footer>
+
+  <script>
+    const cameraInput = document.getElementById('cameraInput');
+    const processButton = document.getElementById('processButton');
+    const imageContainer = document.getElementById('imageContainer');
+    const output = document.getElementById('output');
+
+    // When a user selects a file or takes a picture
+    cameraInput.addEventListener('change', () => {
+      const file = cameraInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const imageUrl = event.target.result;
+
+          // Display the image
+          imageContainer.innerHTML = `<img src="${imageUrl}" alt="Light Image" style="max-width: 100%; height: auto;" />`;
+
+          // Enable the "Analyze Image" button
+          processButton.disabled = false;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // When the "Analyze Image" button is clicked
+    processButton.addEventListener('click', () => {
+      const file = cameraInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const content = event.target.result;
+          
+          // Image analysis would go here (for wavelength detection)
+
+          // Display some dummy result for now
+          output.innerHTML = `<p>Wavelength analysis is still in progress...</p>`;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
+</body>
+</html>
