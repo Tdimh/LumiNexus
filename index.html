@@ -5,7 +5,90 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Light Wavelength Detector</title>
   <style>
-    /* Your existing styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+    }
+
+    header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .container {
+      width: 100%;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    #videoElement {
+      width: 100%;
+      max-width: 400px;
+      margin: 20px 0;
+      border-radius: 5px;
+    }
+
+    #imageContainer img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .output {
+      margin-top: 20px;
+    }
+
+    footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+    }
+
+    /* Mobile responsive styles */
+    @media (max-width: 600px) {
+      .container {
+        padding: 10px;
+      }
+
+      button {
+        width: 100%;
+        font-size: 18px;
+      }
+
+      #videoElement {
+        max-width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
@@ -43,7 +126,7 @@
         console.error("Error accessing camera: ", err);
       });
   
-    // Capture the photo when button is clicked
+    // Capture the photo when the button is clicked
     takePhotoBtn.addEventListener('click', () => {
       // Draw the current video frame to the canvas
       ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
@@ -109,16 +192,14 @@
         reader.onload = (event) => {
           const content = event.target.result;
           
-          // Image analysis would go here (for wavelength detection)
-
-          // Display some dummy result for now
-          output.innerHTML = `<p>Wavelength analysis is still in progress...</p>`;
+          // Start analyzing the image
+          analyzeImageForWavelength(content);
         };
         reader.readAsDataURL(file);
       }
     });
 
-    // Step 4: Function to analyze the image
+    // Function to analyze the image for wavelength
     function analyzeImageForWavelength(imageDataURL) {
       const image = new Image();
       image.src = imageDataURL;
