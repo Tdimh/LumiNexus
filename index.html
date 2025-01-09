@@ -12,8 +12,17 @@
   <header>
     <h1>Light Wavelength Detector</h1>
   </header>
-
-
+ 
+  <div class="container">
+    <div class="card">
+      <h2>Capture Light Data</h2>
+      <p>Take a photo using your camera:</p>
+      <button id="takePhotoBtn">Take Photo</button>
+      <video id="videoElement" autoplay></video>
+      <canvas id="canvas" style="display: none;"></canvas>
+    </div>
+  </div>
+  
   <script>
     const videoElement = document.getElementById('videoElement');
     const canvas = document.getElementById('canvas');
@@ -37,8 +46,8 @@
       // Convert canvas content to image data
       const imageData = canvas.toDataURL('image/png');
       
-      // Show an alert with the captured image data (you can process it later)
-      alert("Image captured: " + imageData);
+      // Show the captured image in the output
+      analyzeImageForWavelength(imageData);
     });
   </script>
   
@@ -62,33 +71,6 @@
   <footer>
     &copy; 2025 Light Detector Co.
   </footer>
-  <script>
-    const videoElement = document.getElementById('videoElement');
-    const canvas = document.getElementById('canvas');
-    const takePhotoBtn = document.getElementById('takePhotoBtn');
-    const ctx = canvas.getContext('2d');
-  
-    // Access the camera
-    navigator.mediaDevices.getUserMedia({ video: true })
-      .then((stream) => {
-        videoElement.srcObject = stream;
-      })
-      .catch((err) => {
-        console.error("Error accessing camera: ", err);
-      });
-  
-    // Capture the photo when button is clicked
-    takePhotoBtn.addEventListener('click', () => {
-      // Draw the current video frame to the canvas
-      ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-      
-      // Convert canvas content to image data
-      const imageData = canvas.toDataURL('image/png');
-      
-      // Show an alert with the captured image data (you can process it later)
-      alert("Image captured: " + imageData);
-    });
-  </script>
   
   <script>
     const cameraInput = document.getElementById('cameraInput');
@@ -130,6 +112,48 @@
         reader.readAsDataURL(file);
       }
     });
+
+    // Step 4: Function to analyze the image
+    function analyzeImageForWavelength(imageDataURL) {
+      const image = new Image();
+      image.src = imageDataURL;
+
+      image.onload = function() {
+        ctx.drawImage(image, 0, 0);
+        const pixelData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        
+        // Get the color values from the image (RGB)
+        const pixels = pixelData.data;
+        let wavelengthSum = 0;
+        let pixelCount = 0;
+
+        for (let i = 0; i < pixels.length; i += 4) {
+          const r = pixels[i];     // Red channel
+          const g = pixels[i + 1]; // Green channel
+          const b = pixels[i + 2]; // Blue channel
+
+          // A simple average to get brightness (you can replace with more complex analysis)
+          const average = (r + g + b) / 3;
+          wavelengthSum += average;
+          pixelCount++;
+        }
+
+        // Step 5: Display wavelength type based on average brightness
+        const averageWavelength = wavelengthSum / pixelCount;
+        let wavelengthType = "";
+
+        if (averageWavelength < 85) {
+          wavelengthType = "Short Wavelength (Ultraviolet)";
+        } else if (averageWavelength < 170) {
+          wavelengthType = "Medium Wavelength (Visible)";
+        } else {
+          wavelengthType = "Long Wavelength (Infrared)";
+        }
+
+        // Show result in the output
+        output.innerHTML = `<p>Average Wavelength: ${averageWavelength.toFixed(2)}</p><p>Wavelength Type: ${wavelengthType}</p>`;
+      };
+    }
   </script>
 </body>
 </html>
